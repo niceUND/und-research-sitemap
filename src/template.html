@@ -1,0 +1,255 @@
+<title>UND Research Site Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F4F7F5; --surface:#FFFFFF; --surface-2:#EAF1ED; --ink:#15201B; --muted:#5A6A63; --line:#C9D6CF;
+  --brand:#00573D; --accent:#008A3E; --link:#0B5CAD; --warn:#9A5B00; --warn-bg:#FFF1D9; --bad:#B3261E; --bad-bg:#FCE8E6;
+  --fresh:#1E7F4E; --fresh-bg:#E1F3E8; --stale:#6D5A00; --stale-bg:#F6EFC8; --old:#8A2A1F; --old-bg:#F8E1DD;
+  --node:#FFFFFF; --edge:#A9BDB2; --sel:#FFE38A;
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#0E1512; --surface:#151F1A; --surface-2:#1C2922; --ink:#E3ECE7; --muted:#9AAEA4; --line:#2C3C34;
+  --brand:#5FD39A; --accent:#5FD39A; --link:#8CC2FF; --warn:#F2C069; --warn-bg:#3A2C10; --bad:#FF8A80; --bad-bg:#3D1916;
+  --fresh:#7FDCAA; --fresh-bg:#16342A; --stale:#E8D37A; --stale-bg:#35300F; --old:#FFA397; --old-bg:#3D1C18;
+  --node:#151F1A; --edge:#3E5247; --sel:#6B5A12;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0E1512; --surface:#151F1A; --surface-2:#1C2922; --ink:#E3ECE7; --muted:#9AAEA4; --line:#2C3C34;
+  --brand:#5FD39A; --accent:#5FD39A; --link:#8CC2FF; --warn:#F2C069; --warn-bg:#3A2C10; --bad:#FF8A80; --bad-bg:#3D1916;
+  --fresh:#7FDCAA; --fresh-bg:#16342A; --stale:#E8D37A; --stale-bg:#35300F; --old:#FFA397; --old-bg:#3D1C18;
+  --node:#151F1A; --edge:#3E5247; --sel:#6B5A12;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.45}
+.wrap{padding-inline:20px;padding-block:18px 28px;max-width:1600px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px}
+h1{margin:0;font-size:26px;font-weight:800;letter-spacing:-.01em;color:var(--brand);text-wrap:balance}
+.sub{margin:2px 0 0;color:var(--muted);font-size:13px}
+.stats{display:flex;flex-wrap:wrap;gap:8px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-size:12px;color:var(--muted)}
+.stat b{display:block;font-size:17px;color:var(--ink);font-variant-numeric:tabular-nums}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.toolbar input{font:inherit;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);width:min(320px,100%)}
+button{font:inherit;font-size:13px;padding:7px 11px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--accent)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--bg)}
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto;font-size:12px;color:var(--muted);align-items:center}
+.chip{display:inline-block;padding:1px 7px;border-radius:999px;font-size:11px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.fresh{background:var(--fresh-bg);color:var(--fresh)} .stale{background:var(--stale-bg);color:var(--stale)} .old{background:var(--old-bg);color:var(--old)}
+.redir{background:var(--bad-bg);color:var(--bad)}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:14px;align-items:start}
+.treebox{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:auto;height:calc(100vh - 200px);min-height:420px;position:relative}
+.treebox svg{display:block}
+.node circle{stroke-width:1.6;cursor:pointer}
+.node text{font-family:var(--sans);font-size:12.5px;fill:var(--ink);cursor:pointer}
+.node .date{font-size:10.5px;fill:var(--muted);font-variant-numeric:tabular-nums;font-weight:600}
+.node .date.fresh{fill:var(--fresh)} .node .date.stale{fill:var(--stale)} .node .date.old{fill:var(--old)}
+.node.redirect text.label{fill:var(--bad);font-weight:700}
+.node.match text.label{font-weight:800}
+.node.selected .hl{fill:var(--sel)}
+.link{fill:none;stroke:var(--edge);stroke-width:1.2}
+aside.detail{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;position:sticky;top:env(safe-area-inset-top,0px);max-height:calc(100vh - 200px);overflow:auto;display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.detail h2{margin:0;font-size:19px;line-height:1.25;text-wrap:balance}
+.url{font-family:var(--mono);font-size:12px;word-break:break-all;color:var(--link)}
+.detail p{margin:0}
+dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0;font-size:13px}
+dt{color:var(--muted)} dd{margin:0;font-variant-numeric:tabular-nums}
+.olist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.olist li{padding:7px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
+.olist .t{font-size:13px}
+.olist .meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:11px;color:var(--muted)}
+.kids{display:flex;flex-wrap:wrap;gap:6px}
+.kids button{font-size:12px;padding:4px 8px}
+a{color:var(--link)}
+section.sitewide{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px}
+section.sitewide h2{margin:0 0 4px;font-size:18px}
+.swgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:4px 22px;margin-top:10px}
+.swgroup{grid-column:1/-1;margin-top:10px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.sw{padding:6px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:1px}
+.sw .n{font-weight:600}
+.sw .d{color:var(--muted);font-size:12.5px}
+.sw .url{font-size:11px}
+.note{font-size:12px;color:var(--muted);max-width:90ch}
+@media (max-width:900px){
+  .main{grid-template-columns:1fr}
+  .treebox{height:62vh}
+  aside.detail{position:static;max-height:none}
+  .legend{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>UND Research Site Map</h1>
+      <p class="sub">Every page under und.edu/research, nested by URL folder. Crawled September 24, 2026.</p>
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <div class="toolbar">
+    <input id="q" type="search" placeholder="Search titles, URLs, summaries" aria-label="Search pages">
+    <button id="expand">Expand all</button>
+    <button id="collapse">Collapse to sections</button>
+    <div class="legend" aria-label="Last updated legend">
+      Last updated:
+      <span class="chip fresh">within 6 months</span>
+      <span class="chip stale">6–24 months</span>
+      <span class="chip old">over 2 years</span>
+      <span class="chip redir">redirects</span>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="treebox" id="treebox"><svg id="tree"></svg></div>
+    <aside class="detail" id="detail" aria-live="polite"></aside>
+  </div>
+
+  <section class="sitewide">
+    <h2>Sitewide links</h2>
+    <p class="note">The header, footer, login and social links that appear on every /research page. They are listed here once rather than under each page. Dates are shown for und.edu pages only.</p>
+    <div class="swgrid" id="sw"></div>
+  </section>
+
+  <p class="note">Dates come from each page's <code>dc.date.modified</code> tag, which the UND CMS sets on publish. Redirects were checked for every /research page and for outbound links on und.edu. Links to other domains, including other *.und.edu subdomains, are listed but were not checked for redirects.</p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const DATA = __DATA__;
+const TODAY = new Date('2026-09-24');
+function ageClass(d){ if(!d) return ''; const m=(TODAY-new Date(d))/(1000*3600*24*30.44); return m<=6?'fresh':m<=24?'stale':'old'; }
+function fmt(d){ if(!d) return '—'; const x=new Date(d+'T12:00:00'); return x.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); }
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const shortUrl=u=>u.replace(/^https?:\/\//,'');
+
+// stats
+(function(){
+  const all=[]; (function w(n){all.push(n);n.children.forEach(w)})(DATA.tree);
+  const c={fresh:0,stale:0,old:0}; all.forEach(n=>c[ageClass(n.updated)]++);
+  const ob=all.reduce((a,n)=>a+n.outbound.length,0);
+  const redirects=all.filter(n=>n.redirect).length;
+  document.getElementById('stats').innerHTML=[
+    ['Pages',all.length],['Sections',DATA.tree.children.filter(c=>c.children.length).length],
+    ['Outbound links',ob],['Redirecting pages',redirects],['Not updated in 2+ yrs',c.old]
+  ].map(([k,v])=>`<div class="stat"><b>${v}</b>${k}</div>`).join('');
+})();
+
+// tree
+const root=d3.hierarchy(DATA.tree);
+root.x0=0; root.y0=0;
+let uid=0; root.descendants().forEach(d=>{d.id=++uid; d._children=d.children; });
+function collapseTo(level){ root.descendants().forEach(d=>{ if(d._children){ d.children = d.depth<level ? d._children : null; } }); }
+collapseTo(1);
+
+const DX=26, DY=450;
+const svg=d3.select('#tree');
+const g=svg.append('g').attr('transform','translate(24,20)');
+const gLink=g.append('g'), gNode=g.append('g');
+const tree=d3.tree().nodeSize([DX,DY]);
+let selected=root, matches=new Set();
+
+function update(source){
+  tree(root);
+  let x0=Infinity,x1=-Infinity,maxY=0;
+  root.each(d=>{x0=Math.min(x0,d.x);x1=Math.max(x1,d.x);maxY=Math.max(maxY,d.y)});
+  const H=x1-x0+60, W=maxY+520;
+  svg.attr('width',W).attr('height',H);
+  g.attr('transform',`translate(24,${30-x0})`);
+  const nodes=root.descendants(), links=root.links();
+  const t=svg.transition().duration(matchMedia('(prefers-reduced-motion: reduce)').matches?0:250);
+
+  const node=gNode.selectAll('g.node').data(nodes,d=>d.id);
+  const enter=node.enter().append('g').attr('class','node')
+    .attr('transform',`translate(${source.y0},${source.x0})`);
+  enter.append('rect').attr('class','hl').attr('x',8).attr('y',-10).attr('height',20).attr('rx',3).attr('fill','transparent');
+  enter.append('circle').attr('r',5.5).on('click',(e,d)=>{toggle(d);update(d)});
+  enter.append('text').attr('class','label').attr('x',12).attr('dy','0.33em')
+    .text(d=>d.data.name).on('click',(e,d)=>{select(d); if(d._children && !d.children){toggle(d);update(d)} else update(d)});
+  enter.append('text').attr('class','date').attr('dy','0.33em');
+  enter.append('title').text(d=>d.data.url);
+  const all=enter.merge(node);
+  all.classed('redirect',d=>!!d.data.redirect).classed('match',d=>matches.has(d.data.id)).classed('selected',d=>d===selected);
+  all.select('circle')
+    .attr('fill',d=>d._children&&!d.children?'var(--brand)':'var(--node)')
+    .attr('stroke',d=>d.data.redirect?'var(--bad)':'var(--brand)');
+  all.each(function(d){
+    const el=d3.select(this); const lw=this.querySelector('text.label').getComputedTextLength();
+    el.select('text.date').attr('class','date '+ageClass(d.data.updated)).attr('x',18+lw).text((d.data.updated||'')+(d._children&&!d.children?`  · ${d._children.length} pages`:''));
+    el.select('rect.hl').attr('width',lw+8);
+  });
+  all.transition(t).attr('transform',d=>`translate(${d.y},${d.x})`);
+  node.exit().transition(t).remove().attr('transform',`translate(${source.y},${source.x})`);
+
+  const diag=d3.linkHorizontal().x(d=>d.y).y(d=>d.x);
+  const link=gLink.selectAll('path.link').data(links,d=>d.target.id);
+  const le=link.enter().append('path').attr('class','link').attr('d',()=>{const o={x:source.x0,y:source.y0};return diag({source:o,target:o})});
+  le.merge(link).transition(t).attr('d',diag);
+  link.exit().transition(t).remove().attr('d',()=>{const o={x:source.x,y:source.y};return diag({source:o,target:o})});
+  root.eachBefore(d=>{d.x0=d.x;d.y0=d.y});
+}
+function toggle(d){ if(!d._children) return; d.children = d.children?null:d._children; }
+
+function select(d){
+  selected=d; const n=d.data; const ac=ageClass(n.updated);
+  const path=d.ancestors().reverse().slice(0,-1);
+  const kids=(d._children||[]);
+  const det=document.getElementById('detail');
+  det.innerHTML=`
+    <div class="eyebrow">${path.length? path.map(p=>esc(p.data.name)).join(' › ') : 'Site root'}</div>
+    <h2>${esc(n.name)}</h2>
+    <a class="url" href="${esc(n.url)}" target="_blank" rel="noopener">${esc(shortUrl(n.url))}</a>
+    <p>${esc(n.summary)}</p>
+    <dl>
+      <dt>Last updated</dt><dd>${fmt(n.updated)} ${ac?`<span class="chip ${ac}">${ac==='fresh'?'recent':ac==='stale'?'6–24 mo':'2+ yrs'}</span>`:''}</dd>
+      <dt>HTTP status</dt><dd>${n.status??'—'}</dd>
+      <dt>Redirect</dt><dd>${n.redirect?`<span class="chip redir">Redirects</span> <a class="url" href="${esc(n.redirect)}" target="_blank" rel="noopener">${esc(shortUrl(n.redirect))}</a>`:'None'}</dd>
+      <dt>Child pages</dt><dd>${kids.length}</dd>
+      <dt>Links to /research</dt><dd>${n.links_in_scope}</dd>
+    </dl>
+    ${kids.length?`<div class="eyebrow">Pages in this section</div><div class="kids">${kids.map(k=>`<button data-id="${esc(k.data.id)}">${esc(k.data.name)}</button>`).join('')}</div>`:''}
+    <div class="eyebrow">Outbound links (${n.outbound.length})</div>
+    ${n.outbound.length?`<ul class="olist">${n.outbound.map(o=>`<li><span class="t">${esc(o.text)}</span>
+      <a class="url" href="${esc(o.url)}" target="_blank" rel="noopener">${esc(shortUrl(o.url))}</a>
+      <span class="meta">${esc(o.kind)}${o.status?` · ${o.status}`:''}${o.status>=400?' <span class="chip redir">broken</span>':''}${o.redirect?` · <span class="chip redir">redirects</span> ${esc(shortUrl(o.redirect))}`:''}</span></li>`).join('')}</ul>`:'<p class="note">No links leave /research from this page\'s content.</p>'}`;
+  det.querySelectorAll('.kids button').forEach(b=>b.onclick=()=>{const k=root.descendants().find(x=>x.data.id===b.dataset.id); reveal(k); select(k); update(k);});
+  det.scrollTop=0;
+}
+function reveal(d){ d.ancestors().forEach(a=>{ if(a._children) a.children=a._children; }); }
+
+document.getElementById('expand').onclick=()=>{collapseTo(99);update(root)};
+document.getElementById('collapse').onclick=()=>{collapseTo(1);update(root)};
+const q=document.getElementById('q');
+q.addEventListener('input',()=>{
+  const s=q.value.trim().toLowerCase(); matches=new Set();
+  if(s.length>=2){
+    collapseTo(1);
+    root.descendants().forEach(d=>{const n=d.data; if((n.name+' '+n.url+' '+n.summary).toLowerCase().includes(s)){matches.add(n.id); reveal(d);} });
+  }
+  update(root);
+});
+
+// sitewide
+(function(){
+  let html='',cur='';
+  DATA.sitewide.forEach(s=>{
+    if(s.group!==cur){cur=s.group; html+=`<div class="swgroup">${esc(cur)}</div>`;}
+    const isWeb=/^https?:/.test(s.url);
+    html+=`<div class="sw"><span class="n">${esc(s.text)}${s.updated?` <span class="chip ${ageClass(s.updated)}">${s.updated}</span>`:''}</span>
+      <span class="d">${esc(s.desc)}</span>
+      ${isWeb?`<a class="url" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(shortUrl(s.url).slice(0,90))}</a>`:`<span class="url">${esc(s.url.replace(/^(mailto|tel):/,'').replace(/\?.*$/,''))}</span>`}</div>`;
+  });
+  document.getElementById('sw').innerHTML=html;
+})();
+
+update(root); select(root); update(root);
+</script>
